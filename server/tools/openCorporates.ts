@@ -18,6 +18,7 @@ export async function fetchOpenCorporatesEnrichment(
   companyName: string
 ): Promise<OpenCorporatesResult> {
   const enabled = process.env.REAL_DATA_SOURCE_ENABLED === "true";
+  console.log("OC enabled?", enabled, JSON.stringify(process.env.REAL_DATA_SOURCE_ENABLED));
   if (!enabled) return { enriched: false };
 
   try {
@@ -26,6 +27,7 @@ export async function fetchOpenCorporatesEnrichment(
       `https://api.opencorporates.com/v0.4/companies/search?q=${query}&per_page=1`,
       { method: "GET", cache: "no-store" }
     );
+    console.log("OpenCorporates HTTP", res.status, res.ok);
     if (!res.ok) return { enriched: false };
 
     const json = (await res.json()) as {

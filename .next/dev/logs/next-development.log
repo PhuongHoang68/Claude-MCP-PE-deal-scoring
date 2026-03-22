@@ -1,2 +1,6 @@
-{"timestamp":"00:00:04.377","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:17:59.219","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:02.771","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:04.429","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:14.192","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:28.011","source":"Server","level":"LOG","message":"REAL_DATA_SOURCE_ENABLED = \"true\""}
+{"timestamp":"00:00:35.470","source":"Server","level":"LOG","message":"OC enabled? true \"\\\"true\\\"\""}
+{"timestamp":"00:00:35.938","source":"Server","level":"LOG","message":"OpenCorporates HTTP 401 false"}

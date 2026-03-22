@@ -10,3 +10,70 @@ body {
 .panel {
   @apply rounded-xl border border-slate-700 bg-slate-900/70 p-4 shadow-lg;
 }
+
+/* Thesis preset apply: field highlight pulse */
+@keyframes thesis-field-glow {
+  0% {
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.25), 0 0 20px -4px rgba(34, 211, 238, 0.2);
+    background-color: rgba(15, 23, 42, 0.6);
+  }
+  40% {
+    box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.45), 0 0 28px -2px rgba(34, 211, 238, 0.25);
+    background-color: rgba(8, 47, 73, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 1px rgba(51, 65, 85, 0.5);
+    background-color: transparent;
+  }
+}
+
+/* Single pass; duration synced with THESIS_FIELD_FLASH_CLEAR_MS in app/page.tsx */
+.thesis-field--flash {
+  animation: thesis-field-glow 1.3s ease-out 1 forwards;
+  border-radius: 0.5rem;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+@keyframes preset-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.preset-toast {
+  animation: preset-toast-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes info-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.info-popover-panel {
+  animation: info-popover-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thesis-field--flash {
+    animation: none;
+    outline: 2px solid rgba(34, 211, 238, 0.5);
+    outline-offset: 2px;
+  }
+  .preset-toast {
+    animation: none;
+  }
+  .info-popover-panel {
+    animation: none;
+  }
+}
