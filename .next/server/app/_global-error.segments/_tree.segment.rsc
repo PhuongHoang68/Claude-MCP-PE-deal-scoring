@@ -1,1 +1,1 @@
-0:{"tree":{"name":"","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"7kwIsK2pB0Lvb7HGMicIu"}
+0:{"tree":{"name":"","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"w2z3XGGe1p6ZA3qkLGueN"}

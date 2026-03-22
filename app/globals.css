@@ -2,13 +2,158 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: #0b1220;
-  color: #e5e7eb;
+/* Canvas fallback (gradient layer is inline in layout.tsx — see app-shell-gradient.ts) */
+html {
+  min-height: 100%;
+  background-color: #070d18;
 }
 
+.deals-app-shell {
+  min-height: 100%;
+  min-height: 100dvh;
+  color: #e5e7eb;
+  background: transparent;
+  position: relative;
+}
+
+/* Panels: same border language as .analyze-loading-card (slate-500/35 + cyan rim like loading glow) */
 .panel {
-  @apply rounded-xl border border-slate-700 bg-slate-900/70 p-4 shadow-lg;
+  @apply relative z-[1] rounded-xl p-4;
+  background: linear-gradient(
+    155deg,
+    rgba(24, 32, 48, 0.95) 0%,
+    rgba(17, 24, 39, 0.92) 45%,
+    rgba(15, 23, 42, 0.88) 100%
+  );
+  border: 1px solid rgb(100 116 139 / 0.35);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.22),
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    0 8px 16px rgba(0, 0, 0, 0.35),
+    0 24px 48px -12px rgba(0, 0, 0, 0.65),
+    -8px 12px 36px -14px rgba(34, 211, 238, 0.14),
+    10px 16px 40px -16px rgba(99, 102, 241, 0.12);
+}
+
+/* ─── Analyze loading overlay ─── */
+.analyze-loading-backdrop {
+  background: rgba(4, 8, 16, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@keyframes analyze-card-glow-shift {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.25),
+      0 32px 64px -12px rgba(0, 0, 0, 0.75),
+      -14px 18px 48px -16px rgba(34, 211, 238, 0.2),
+      16px 22px 56px -18px rgba(139, 92, 246, 0.16),
+      0 0 100px -20px rgba(6, 182, 212, 0.12);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.38),
+      0 36px 72px -10px rgba(0, 0, 0, 0.68),
+      16px 14px 52px -14px rgba(99, 102, 241, 0.18),
+      -12px 24px 56px -16px rgba(34, 211, 238, 0.18),
+      0 0 120px -18px rgba(34, 211, 238, 0.14);
+  }
+}
+
+.analyze-loading-card {
+  animation: analyze-card-glow-shift 3.5s ease-in-out infinite;
+}
+
+.analyze-progress-track {
+  position: relative;
+  height: 6px;
+  border-radius: 9999px;
+  background: rgba(30, 41, 59, 0.95);
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Full-width sliding highlight — linear motion + GPU layer = smooth */
+.analyze-progress-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 55%;
+  border-radius: 9999px;
+  will-change: transform;
+  transform: translate3d(-100%, 0, 0);
+  backface-visibility: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(34, 211, 238, 0) 0%,
+    rgba(34, 211, 238, 0.35) 18%,
+    rgba(34, 211, 238, 0.95) 42%,
+    rgba(192, 132, 252, 0.9) 50%,
+    rgba(34, 211, 238, 0.95) 58%,
+    rgba(34, 211, 238, 0.35) 82%,
+    rgba(34, 211, 238, 0) 100%
+  );
+  animation: analyze-progress-glide 2.1s linear infinite;
+}
+
+@keyframes analyze-progress-glide {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(280%, 0, 0);
+  }
+}
+
+/* Analyze CTA: hover sweep + glow */
+.btn-analyze-deal {
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 0 32px -4px rgba(34, 211, 238, 0.4);
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+}
+
+.btn-analyze-deal:hover:not(:disabled) {
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.45),
+    0 0 48px -2px rgba(34, 211, 238, 0.55),
+    0 0 72px -10px rgba(103, 232, 249, 0.28);
+  filter: brightness(1.06);
+  transform: scale(1.015);
+}
+
+.btn-analyze-deal:active:not(:disabled) {
+  transform: scale(0.992);
+  filter: brightness(0.98);
+}
+
+.btn-analyze-deal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: -100%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 45%,
+    rgba(255, 255, 255, 0.08) 55%,
+    transparent 100%
+  );
+  transform: skewX(-12deg);
+  transition: left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.btn-analyze-deal:hover:not(:disabled)::before {
+  left: 100%;
 }
 
 /* Thesis preset apply: field highlight pulse */
@@ -27,7 +172,6 @@ body {
   }
 }
 
-/* Single pass; duration synced with THESIS_FIELD_FLASH_CLEAR_MS in app/page.tsx */
 .thesis-field--flash {
   animation: thesis-field-glow 1.3s ease-out 1 forwards;
   border-radius: 0.5rem;
@@ -75,5 +219,24 @@ body {
   }
   .info-popover-panel {
     animation: none;
+  }
+  .analyze-loading-card {
+    animation: none;
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.28),
+      0 28px 56px -12px rgba(0, 0, 0, 0.7);
+  }
+  .analyze-progress-shimmer {
+    animation: none;
+    transform: translate3d(22%, 0, 0);
+    width: 56%;
+    opacity: 0.55;
+  }
+  .btn-analyze-deal:hover:not(:disabled),
+  .btn-analyze-deal:active:not(:disabled) {
+    transform: none;
+  }
+  .btn-analyze-deal::before {
+    display: none;
   }
 }

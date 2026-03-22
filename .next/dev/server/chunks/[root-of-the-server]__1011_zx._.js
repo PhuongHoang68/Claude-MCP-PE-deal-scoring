@@ -518,7 +518,6 @@ function normalizeCountryCode(code) {
 }
 async function fetchOpenCorporatesEnrichment(companyName) {
     const enabled = process.env.REAL_DATA_SOURCE_ENABLED === "true";
-    console.log("OC enabled?", enabled, JSON.stringify(process.env.REAL_DATA_SOURCE_ENABLED));
     if (!enabled) return {
         enriched: false
     };
@@ -528,7 +527,6 @@ async function fetchOpenCorporatesEnrichment(companyName) {
             method: "GET",
             cache: "no-store"
         });
-        console.log("OpenCorporates HTTP", res.status, res.ok);
         if (!res.ok) return {
             enriched: false
         };
@@ -994,7 +992,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$server$2f$claude$2f$claudeMc
 ;
 async function POST(req) {
     try {
-        console.log("REAL_DATA_SOURCE_ENABLED =", process.env.REAL_DATA_SOURCE_ENABLED);
         const body = await req.json();
         const parsed = __TURBOPACK__imported__module__$5b$project$5d2f$shared$2f$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["analyzeDealInputSchema"].safeParse(body);
         if (!parsed.success) {

@@ -424,6 +424,31 @@ function ThesisFieldWrap({
   );
 }
 
+function AnalyzeLoadingOverlay() {
+  return (
+    <div
+      className="analyze-loading-backdrop fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      aria-label="Generating deal analysis"
+    >
+      <div className="analyze-loading-card w-full max-w-md rounded-3xl border border-slate-500/35 bg-slate-950/92 px-8 py-9 text-center backdrop-blur-xl">
+        <p className="text-lg font-semibold tracking-tight text-slate-50 sm:text-xl">
+          Generating your deal score
+        </p>
+        <p className="mt-2.5 text-sm leading-relaxed text-slate-400">
+          Running the policy engine and intake path. With Claude+MCP enabled, this can take up to about a
+          minute.
+        </p>
+        <div className="analyze-progress-track mt-8" aria-hidden>
+          <div className="analyze-progress-shimmer" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage() {
   const [companyName, setCompanyName] = useState(SCENARIO_OPTIONS[0].value);
   const [website, setWebsite] = useState(defaultWebsites[SCENARIO_OPTIONS[0].value] ?? "");
@@ -540,7 +565,8 @@ export default function HomePage() {
     result?.normalized_profile.source_labels.some((l) => l.includes("opencorporates")) ?? false;
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-4 sm:p-6">
+    <>
+    <main className="relative z-[1] mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-4 sm:p-6">
       <header className="panel">
         <p className="text-xs uppercase tracking-wider text-cyan-300">Deal Intake Copilot</p>
         <h1 className="mt-1 text-2xl font-semibold text-slate-100">PE Deal Intake and Triage</h1>
@@ -831,7 +857,7 @@ export default function HomePage() {
 
           <button
             type="submit"
-            className="w-full rounded-md bg-cyan-500 px-4 py-2.5 font-medium text-slate-950 transition hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:opacity-60"
+            className="btn-analyze-deal relative isolate w-full overflow-hidden rounded-lg bg-gradient-to-r from-cyan-500 via-cyan-400 to-teal-400 px-4 py-2.5 font-semibold text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] disabled:opacity-55"
             disabled={loading}
           >
             {loading ? "Analyzing…" : "Analyze deal"}
@@ -1013,6 +1039,8 @@ export default function HomePage() {
         </section>
       </section>
     </main>
+    {loading ? <AnalyzeLoadingOverlay /> : null}
+    </>
   );
 }
 

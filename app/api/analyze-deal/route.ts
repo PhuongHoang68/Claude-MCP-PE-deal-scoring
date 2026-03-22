@@ -10,7 +10,6 @@ import type { AnalyzeDealResponse, ClaudeMcpPayload, ToolTracePayload } from "@/
 
 export async function POST(req: Request) {
   try {
-    console.log("REAL_DATA_SOURCE_ENABLED =", process.env.REAL_DATA_SOURCE_ENABLED);
     const body = await req.json();
     const parsed = analyzeDealInputSchema.safeParse(body);
     if (!parsed.success) {
