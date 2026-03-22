@@ -163,6 +163,58 @@ export function computeScoreBreakdown(
   };
 }
 
+/** Short PE-style memo bullets (deterministic); each kept ≤130 chars where practical. */
+function buildDeterministicReasonBullets(
+  breakdown: ScoreBreakdown,
+  thesis: ThesisInput,
+  profile: NormalizedDealProfile,
+  score: number
+): string[] {
+  const bullets: string[] = [];
+  const indMatch =
+    profile.industry.toLowerCase() === thesis.target_industry.toLowerCase();
+  bullets.push(
+    indMatch
+      ? `Industry fit: ${profile.industry} matches thesis target.`
+      : `Industry gap: ${profile.industry} vs thesis's stated industry of ${thesis.target_industry}.`
+  );
+
+  if (profile.revenue_range === "unknown") {
+    bullets.push("Revenue unknown—no size fit credit until diligence.");
+  } else if (breakdown.size_fit > 0) {
+    bullets.push(
+      `Size fit: ${profile.revenue_range} aligns with thesis band (${thesis.revenue_range}).`
+    );
+  } else {
+    bullets.push(
+      `Size gap: ${profile.revenue_range} vs thesis band (${thesis.revenue_range}).`
+    );
+  }
+
+  bullets.push(
+    `Profile: growth ${profile.growth_indicator}; profitability ${profile.profitability_indicator}.`
+  );
+
+  if (profile.headquarters.toLowerCase() === "unknown") {
+    bullets.push("Geography: HQ unknown—no geography credit.");
+  } else if (breakdown.geography_fit > 0) {
+    bullets.push(`Geography fit: ${profile.headquarters} within ${thesis.geography_preference} scope.`);
+  } else {
+    bullets.push(`Geography: ${profile.headquarters} vs thesis ${thesis.geography_preference}.`);
+  }
+
+  bullets.push(
+    `Data: +${breakdown.data_completeness}/${SCORING_WEIGHTS.dataCompleteness}; conf ${profile.data_confidence}; score ${score} vs thresh ${thesis.minimum_fit_threshold}.`
+  );
+
+  if (breakdown.risk_penalty > 0) {
+    bullets.push(`Risk: −${breakdown.risk_penalty} pts (cap ${SCORING_WEIGHTS.maxRiskPenalty}).`);
+  }
+
+  const trimmed = bullets.map((b) => (b.length > 130 ? `${b.slice(0, 129).trimEnd()}…` : b));
+  return trimmed.slice(0, 6);
+}
+
 export function analyzeDeterministic(
   profile: Omit<NormalizedDealProfile, "thesis_fit">,
   thesis: ThesisInput
@@ -181,11 +233,7 @@ export function analyzeDeterministic(
   if (normalizedProfile.headquarters.toLowerCase() === "unknown")
     missingData.push("headquarters data missing");
 
-  const reasons = [
-    `Weighted intake score ${score}/100 (industry ${breakdown.industry_fit}/${SCORING_WEIGHTS.industryFit}, size ${breakdown.size_fit}/${SCORING_WEIGHTS.sizeFit}, growth ${breakdown.growth_fit}/${SCORING_WEIGHTS.growthFit}, profitability ${breakdown.profitability_fit}/${SCORING_WEIGHTS.profitabilityFit}, geography ${breakdown.geography_fit}/${SCORING_WEIGHTS.geographyFit}, data ${breakdown.data_completeness}/${SCORING_WEIGHTS.dataCompleteness}; risk penalty -${breakdown.risk_penalty}).`,
-    `Thesis target industry: ${thesis.target_industry}; company industry: ${normalizedProfile.industry}.`,
-    `Data confidence (used as output confidence): ${normalizedProfile.data_confidence}/100.`
-  ];
+  const reasons = buildDeterministicReasonBullets(breakdown, thesis, normalizedProfile, score);
 
   return {
     company_name: normalizedProfile.company_name,

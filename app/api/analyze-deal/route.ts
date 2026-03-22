@@ -65,8 +65,8 @@ export async function POST(req: Request) {
       analysis = {
         ...analysis,
         reasons: [
-          `Claude intake summary (via MCP tools): ${orchestration.assistant_summary}`,
-          ...analysis.reasons
+          ...analysis.reasons,
+          `Claude intake summary (via MCP tools): ${orchestration.assistant_summary}`
         ]
       };
     } else if (!orchestration.ok) {

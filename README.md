@@ -58,3 +58,4 @@ If orchestration fails or no key is set, the API falls back to deterministic too
 - Analyze route: `app/api/analyze-deal/route.ts`
 - One-screen UI: `app/page.tsx`
 - Acceptance tests: `tests/smoke.test.ts`, `tests/scenario-checks.test.ts`
+- Demo → production backlog notes: `demo_to_prod.md`

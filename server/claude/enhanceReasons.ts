@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { DealAnalysisOutput, NormalizedDealProfile, ThesisInput } from "../../shared/types";
+import { resolveAnthropicModel } from "./anthropicModel";
 
 /**
  * Optional: use Claude to tighten PE-style wording for reasons only.

@@ -108,6 +108,8 @@ Follow this exact order:
 
 Do not proceed to polishing if deterministic core checks fail.
 
+**Final improvements (`final-improvements.md`):** use **`HANDOFF_FINAL_IMPROVEMENTS.md`** as the executable spec (defaults, layout, acceptance). Still run the **Continuous Review Loop** below for every substantive chunk of work.
+
 ## Continuous Review Loop (Mandatory)
 
 After each substantive implementation unit, run:
