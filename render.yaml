@@ -1,0 +1,20 @@
+services:
+  - type: web
+    runtime: node
+    name: pe-deal-scoring
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-haiku-4-5-20251001
+      - key: USE_CLAUDE_MCP_ORCHESTRATION
+        value: "true"
+      - key: CLAUDE_MCP_TIMEOUT_MS
+        value: "55000"
+      - key: REAL_DATA_SOURCE_ENABLED
+        value: "true"

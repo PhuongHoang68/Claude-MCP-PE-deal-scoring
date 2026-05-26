@@ -100,9 +100,10 @@ export async function runClaudeMcpOrchestration(input: {
   const root = repoRootFromHere();
   const toolLog: ClaudeMcpToolInvocation[] = [];
 
+  const tsxBin = path.resolve(root, "node_modules", ".bin", "tsx");
   const transport = new StdioClientTransport({
-    command: "npx",
-    args: ["tsx", "server/mcp-server.ts"],
+    command: tsxBin,
+    args: ["server/mcp-server.ts"],
     cwd: root,
     stderr: process.env.MCP_SERVER_LOG_STDERR === "true" ? "inherit" : "pipe"
   });
